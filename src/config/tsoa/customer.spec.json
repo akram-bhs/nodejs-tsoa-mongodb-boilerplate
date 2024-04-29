@@ -1,0 +1,65 @@
+{
+    "entryFile": "src/app.ts",
+    "noImplicitAdditionalProperties": "throw-on-extras",
+    "controllerPathGlobs": [
+        "src/controllers/customer/auth.controller.ts",
+        "src/controllers/customer/current-user.controller.ts",
+        "src/controllers/customer/directory.controller.ts",
+        "src/controllers/customer/file.controller.ts"
+    ],
+    "spec": {
+        "outputDirectory": "public/docs/customer",
+        "version": "v1",
+        "specVersion": 3,
+        "name": "Node.js tsoa MongoDB Boilerplate Customer API",
+        "description": "This is a Node.js tsoa MongoDB Boilerplate Customer API version v1. It serves as the backbone for customer-facing applications, providing seamless interactions with MongoDB databases. The API empowers developers to build robust customer-centric applications with ease. With specVersion 3, this API adheres to the latest specifications, ensuring compatibility and performance. The 'public/docs/customer' directory acts as the designated output location for the API documentation, facilitating easy access and reference for developers. Whether it's managing user profiles, handling transactions, or accessing product catalogs, this API simplifies customer-focused application development and enhances the overall user experience.",
+        "contact": {
+            "name": "Akram B.",
+            "email": "belhajsalem.akram@gmail.com"
+        },
+        "license": "Apache 2.0",
+        "basePath": "/api/customer/v1",
+        "securityDefinitions": {
+            "AccessToken": {
+                "type": "apiKey",
+                "name": "x-access-token",
+                "in": "header",
+                "scopes": {
+                    "customer": "Customer"
+                }
+            },
+            "RefreshToken": {
+                "type": "apiKey",
+                "name": "x-refresh-token",
+                "in": "header",
+                "scopes": {
+                    "customer": "Customer"
+                }
+            }
+        },
+        "tags": [
+            {
+                "name": "Multilingual Directories",
+                "description": "A robust set of endpoints and functionalities designed to handle directories in a multilingual context. This feature ensures seamless organization and retrieval of data across different languages, enhancing accessibility and user experience within the system."
+            },
+            {
+                "name": "User Authentication",
+                "description": "Comprehensive endpoints and functionalities dedicated to secure user authentication processes, ensuring a reliable and protected mechanism for user access to the system."
+            },
+            {
+                "name": "Current User",
+                "description": "Specialized endpoints and functionalities tailored for seamless interaction with the authenticated user's account, providing personalized access to information and settings."
+            },
+            {
+                "name": "Files Upload",
+                "description": "Versatile set of endpoints and functionalities designed for effortless uploading, retrieval, and management of files within the system, delivering a user-friendly and efficient file-handling experience."
+            }
+        ]
+    },
+    "routes": {
+        "routesDir": "src/routes/customer",
+        "basePath": "/api/customer/v1",
+        "iocModule": "src/utils/injector",
+        "authenticationModule": "src/middleware/auth.middleware"
+    }
+}

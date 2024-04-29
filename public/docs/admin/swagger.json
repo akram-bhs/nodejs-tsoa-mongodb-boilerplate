@@ -1,0 +1,3393 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"AccountType": {
+				"description": "Enum representing the type of user account.\nIt can be either 'Admin' or 'Customer'.",
+				"enum": [
+					"Admin",
+					"Customer"
+				],
+				"type": "string"
+			},
+			"SignInUserData": {
+				"description": "Represents the data structure for user sign-in response.\nThis class is used to parse and store information about the signed-in user, including account type and tokens.",
+				"properties": {
+					"accountType": {
+						"$ref": "#/components/schemas/AccountType",
+						"description": "The type of the user account, which can be either 'Admin' or 'Customer'."
+					},
+					"accessToken": {
+						"type": "string",
+						"description": "Access token for the signed-in user."
+					},
+					"refreshToken": {
+						"type": "string",
+						"description": "Refresh token for the signed-in user."
+					}
+				},
+				"required": [
+					"accountType",
+					"accessToken",
+					"refreshToken"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"accountType": "User",
+					"accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+					"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+				}
+			},
+			"Error": {
+				"description": "Represents an error in the API response.",
+				"properties": {
+					"code": {
+						"type": "string",
+						"description": "The error code."
+					},
+					"message": {
+						"type": "string",
+						"description": "The error message."
+					}
+				},
+				"required": [
+					"code",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Warning": {
+				"description": "Represents a warning in the API response.",
+				"properties": {
+					"code": {
+						"type": "string",
+						"description": "The warning code."
+					},
+					"message": {
+						"type": "string",
+						"description": "The warning message."
+					}
+				},
+				"required": [
+					"code",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SignInUserRes": {
+				"description": "Represents the response payload for user sign-in.\nExtends the base ApiResponse class with a generic parameter of SignInUserData type.\nThis class is used to handle the response after successfully signing in a user.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/SignInUserData"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResetPasswordReq": {
+				"description": "Represents the request payload for resetting a user's password.\nThis class is used when a user is resetting their password and provides a new password.",
+				"properties": {
+					"newPassword": {
+						"type": "string",
+						"description": "The new password for the user account.\nIt must not be empty and should have a minimum length of 8 characters."
+					}
+				},
+				"required": [
+					"newPassword"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"newPassword": "NewPassw0rd"
+				}
+			},
+			"Success": {
+				"description": "Represents a success response.",
+				"properties": {
+					"success": {
+						"type": "boolean",
+						"description": "Indicates whether the operation was successful."
+					}
+				},
+				"required": [
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"success": true
+				}
+			},
+			"SendPasswordResetTokenRes": {
+				"description": "Represents the response payload for sending a password reset token.\nExtends the base ApiResponse class with a generic parameter of Success type.\nThis class is used to handle the response after sending a password reset token.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/Success"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SendPasswordResetTokenReq": {
+				"description": "Represents the request payload for sending a password reset token.\nThis class is used when a user requests a password reset and provides their email address.",
+				"properties": {
+					"emailAddress": {
+						"type": "string",
+						"description": "Email address of the user requesting a password reset.\nIt should be a valid email address format."
+					}
+				},
+				"required": [
+					"emailAddress"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"emailAddress": "john.doe@example.com"
+				}
+			},
+			"CheckPasswordResetTokenData": {
+				"description": "Represents the data structure for checking the validity of a password reset token.\nThis class is used to parse and store the information about whether a password reset token is valid or not.",
+				"properties": {
+					"isValid": {
+						"type": "boolean",
+						"description": "Indicates whether the password reset token is valid or not."
+					}
+				},
+				"required": [
+					"isValid"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"isValid": true
+				}
+			},
+			"CheckPasswordResetTokenRes": {
+				"description": "Represents the response payload for checking the validity of a password reset token.\nExtends the base ApiResponse class with a generic parameter of CheckPasswordResetTokenData type.\nThis class is used to handle the response after checking the validity of a password reset token.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/CheckPasswordResetTokenData"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResetPasswordRes": {
+				"description": "Represents the response payload for resetting a user's password.\nExtends the base ApiResponse class with a generic parameter of Success type.\nThis class is used to handle the response after successfully resetting a user's password.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/Success"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SignInUserReq": {
+				"description": "Represents the request payload for user sign-in.\nThis class is used when a user is trying to sign in and provides their email address and password.",
+				"properties": {
+					"emailAddress": {
+						"type": "string",
+						"description": "Email address of the user signing in.\nIt should be a valid email address format."
+					},
+					"password": {
+						"type": "string",
+						"description": "Password of the user signing in."
+					}
+				},
+				"required": [
+					"emailAddress",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"emailAddress": "john.doe@example.com",
+					"password": "Password123"
+				}
+			},
+			"ShortRoleData": {
+				"description": "Represents a concise version of role data.",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "The MongoDB ObjectId of the user's role."
+					},
+					"name": {
+						"type": "string",
+						"description": "The name of the role."
+					}
+				},
+				"required": [
+					"id",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Email": {
+				"description": "Represents email information for a user.",
+				"properties": {
+					"address": {
+						"type": "string",
+						"description": "The email address of the user."
+					},
+					"isVerified": {
+						"type": "boolean",
+						"description": "Indicates whether the email address is verified."
+					}
+				},
+				"required": [
+					"address",
+					"isVerified"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Phone": {
+				"description": "Represents phone information for a user.",
+				"properties": {
+					"number": {
+						"type": "string",
+						"description": "The phone number of the user."
+					},
+					"isVerified": {
+						"type": "boolean",
+						"description": "Indicates whether the phone number is verified."
+					}
+				},
+				"required": [
+					"number",
+					"isVerified"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Resource": {
+				"description": "Represents a resource with a URL.",
+				"properties": {
+					"url": {
+						"type": "string",
+						"description": "The URL of the resource."
+					}
+				},
+				"required": [
+					"url"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"url": "https://example.com/file.jpg"
+				}
+			},
+			"Gender": {
+				"description": "Enum representing the gender of a user.\nIt can be either 'Male' or 'Female'.",
+				"enum": [
+					"Male",
+					"Female"
+				],
+				"type": "string"
+			},
+			"CountryInfo": {
+				"description": "Represents information about a country.",
+				"properties": {
+					"iso2": {
+						"type": "string",
+						"description": "The ISO 3166-1 alpha-2 code associated with the country."
+					},
+					"iso3": {
+						"type": "string",
+						"description": "The ISO 3166-1 alpha-3 code associated with the country."
+					},
+					"name": {
+						"type": "string",
+						"description": "The name of the country."
+					}
+				},
+				"required": [
+					"iso2",
+					"iso3",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"iso2": "US",
+					"iso3": "USA",
+					"name": "United States"
+				}
+			},
+			"PersonalUserData": {
+				"description": "Represents personal information for a user.",
+				"properties": {
+					"firstName": {
+						"type": "string",
+						"description": "The first name of the user."
+					},
+					"middleName": {
+						"type": "string",
+						"description": "The middle name of the user (optional)."
+					},
+					"lastName": {
+						"type": "string",
+						"description": "The last name of the user."
+					},
+					"avatar": {
+						"$ref": "#/components/schemas/Resource",
+						"description": "Avatar resource for the user (optional)."
+					},
+					"cover": {
+						"$ref": "#/components/schemas/Resource",
+						"description": "Cover resource for the user (optional)."
+					},
+					"dateOfBirth": {
+						"type": "string",
+						"description": "The date of birth of the user (optional)."
+					},
+					"gender": {
+						"$ref": "#/components/schemas/Gender",
+						"description": "The gender of the user (optional)."
+					},
+					"citizenship": {
+						"$ref": "#/components/schemas/CountryInfo",
+						"description": "The citizenship information for the user (optional)."
+					}
+				},
+				"required": [
+					"firstName",
+					"lastName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"StateInfo": {
+				"description": "Represents information about a state.",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": "The unique identifier (ID) of the state."
+					},
+					"name": {
+						"type": "string",
+						"description": "The name of the state."
+					}
+				},
+				"required": [
+					"id",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CityInfo": {
+				"description": "Represents information about a city.",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": "The unique identifier (ID) of the city."
+					},
+					"name": {
+						"type": "string",
+						"description": "The name of the city."
+					}
+				},
+				"required": [
+					"id",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AddressUserData": {
+				"description": "Represents address information for a user.",
+				"properties": {
+					"country": {
+						"$ref": "#/components/schemas/CountryInfo",
+						"description": "The country information for the user."
+					},
+					"state": {
+						"$ref": "#/components/schemas/StateInfo",
+						"description": "The state information for the user (optional)."
+					},
+					"city": {
+						"$ref": "#/components/schemas/CityInfo",
+						"description": "The city information for the user (optional)."
+					},
+					"addressLine": {
+						"type": "string",
+						"description": "The address line for the user (optional)."
+					},
+					"postalCode": {
+						"type": "string",
+						"description": "The postal code for the user (optional)."
+					}
+				},
+				"required": [
+					"country"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserActivationStatus": {
+				"description": "Enum representing the activation status of a user.\nIt can be either 'Active', 'Inactive', 'Suspended', or 'Banned'.",
+				"enum": [
+					"Active",
+					"Inactive",
+					"Suspended",
+					"Banned"
+				],
+				"type": "string"
+			},
+			"PermissionShortData": {
+				"description": "Represents short information about a permission.",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "The MongoDB ObjectId of the permission."
+					},
+					"name": {
+						"type": "string",
+						"description": "The name of the permission."
+					}
+				},
+				"required": [
+					"id",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AccessType": {
+				"description": "Enum representing the type of access for a permission.\nIt can be either 'FullControl' or 'ReadOnly'.",
+				"enum": [
+					"FullControl",
+					"ReadOnly"
+				],
+				"type": "string"
+			},
+			"RolePermissionData": {
+				"description": "Represents permission data for a role.",
+				"properties": {
+					"permission": {
+						"$ref": "#/components/schemas/PermissionShortData",
+						"description": "The permission details."
+					},
+					"accessType": {
+						"$ref": "#/components/schemas/AccessType",
+						"description": "The type of access for the permission."
+					}
+				},
+				"required": [
+					"permission",
+					"accessType"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AccessControlData": {
+				"description": "Represents access control data for a role.",
+				"properties": {
+					"permissions": {
+						"items": {
+							"$ref": "#/components/schemas/RolePermissionData"
+						},
+						"type": "array",
+						"description": "List of permissions with their corresponding access types."
+					},
+					"hasAllPermissions": {
+						"type": "boolean",
+						"description": "Indicates whether the role has all permissions."
+					}
+				},
+				"required": [
+					"permissions",
+					"hasAllPermissions"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DetailedUserData": {
+				"description": "Represents detailed information about a user.\nThis class includes properties such as id, accountType, role, email, phone, personal, address, activationStatus, accessControl, createdAt, and updatedAt.",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "The MongoDB ObjectId of the user."
+					},
+					"accountType": {
+						"$ref": "#/components/schemas/AccountType",
+						"description": "The type of the user account, which can be either 'Admin' or 'Customer'."
+					},
+					"role": {
+						"$ref": "#/components/schemas/ShortRoleData",
+						"description": "The role information of the user."
+					},
+					"email": {
+						"$ref": "#/components/schemas/Email",
+						"description": "The email information for the user."
+					},
+					"phone": {
+						"$ref": "#/components/schemas/Phone",
+						"description": "The phone information for the user."
+					},
+					"personal": {
+						"$ref": "#/components/schemas/PersonalUserData",
+						"description": "Personal information for the user, including first name, middle name, last name, avatar, cover, date of birth, gender, and citizenship."
+					},
+					"address": {
+						"$ref": "#/components/schemas/AddressUserData",
+						"description": "Address information for the user, including country, state, city, address line, and postal code."
+					},
+					"activationStatus": {
+						"$ref": "#/components/schemas/UserActivationStatus",
+						"description": "The activation status of the user account (e.g., 'Active', 'Inactive', 'Suspended', 'Banned')."
+					},
+					"accessControl": {
+						"$ref": "#/components/schemas/AccessControlData",
+						"description": "Access control information for the user."
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time",
+						"description": "The date and time when the user was created."
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time",
+						"description": "The date and time when the user was last updated."
+					}
+				},
+				"required": [
+					"id",
+					"accountType",
+					"role",
+					"email",
+					"phone",
+					"personal",
+					"address",
+					"activationStatus",
+					"accessControl",
+					"createdAt",
+					"updatedAt"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"id": "5f4a7b61e55b8439b5bea1b1",
+					"accountType": "Admin",
+					"role": {
+						"id": "5f4a7b61e55b8439b5bea1b2",
+						"name": "AdminRole"
+					},
+					"email": {
+						"address": "john.doe@example.com",
+						"isVerified": true
+					},
+					"phone": {
+						"number": "1234567890",
+						"isVerified": true
+					},
+					"personal": {
+						"firstName": "John",
+						"middleName": "Doe",
+						"lastName": "Smith",
+						"avatar": {
+							"url": "https://example.com/avatar.jpg"
+						},
+						"cover": {
+							"url": "https://example.com/cover.jpg"
+						},
+						"dateOfBirth": "1990-01-01",
+						"gender": "Male",
+						"citizenship": {
+							"iso2": "US",
+							"iso3": "USA",
+							"name": "United States"
+						}
+					},
+					"address": {
+						"country": {
+							"iso2": "US",
+							"iso3": "USA",
+							"name": "United States"
+						},
+						"state": {
+							"id": 1,
+							"name": "California"
+						},
+						"city": {
+							"id": 123,
+							"name": "Los Angeles"
+						},
+						"addressLine": "123 Main Street",
+						"postalCode": "12345"
+					},
+					"activationStatus": "Active",
+					"accessControl": {
+						"permissions": [
+							{
+								"permissionId": "5f4a7b61e55b8439b5bea1b3",
+								"accessType": "FullControl"
+							},
+							{
+								"permissionId": "5f4a7b61e55b8439b5bea1b4",
+								"accessType": "ReadOnly"
+							}
+						],
+						"hasAllPermissions": false
+					},
+					"createdAt": "2022-01-20T12:30:00Z",
+					"updatedAt": "2022-01-21T09:45:00Z"
+				}
+			},
+			"GetUserRes": {
+				"description": "Represents the response payload for retrieving detailed user data.\nThis class extends the ApiResponse class with a generic parameter of DetailedUserData type.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/DetailedUserData"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateUserRes": {
+				"description": "Represents the response payload for updating a user.\nExtends the base ApiResponse class with a generic parameter of Success type.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/Success"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserReq": {
+				"description": "Represents the request payload for creating or updating a user.\nThis class is used when information about a user, such as personal details and contact information, is provided.",
+				"properties": {
+					"roleId": {
+						"type": "string",
+						"description": "The MongoDB ObjectId of the user's role.\nIt must not be empty and should be a valid MongoDB ObjectId."
+					},
+					"firstName": {
+						"type": "string",
+						"description": "The first name of the user.\nIt must not be empty."
+					},
+					"middleName": {
+						"type": "string",
+						"description": "The middle name of the user (optional)."
+					},
+					"lastName": {
+						"type": "string",
+						"description": "The last name of the user.\nIt must not be empty."
+					},
+					"avatar": {
+						"$ref": "#/components/schemas/Resource",
+						"description": "Avatar resource for the user (optional).\nIt can be an instance of the Resource class."
+					},
+					"cover": {
+						"$ref": "#/components/schemas/Resource",
+						"description": "Cover resource for the user (optional).\nIt can be an instance of the Resource class."
+					},
+					"emailAddress": {
+						"type": "string",
+						"description": "The email address of the user.\nIt must not be empty and should be a valid email address format."
+					},
+					"phoneNumber": {
+						"type": "string",
+						"description": "The phone number of the user.\nIt must not be empty."
+					},
+					"dateOfBirth": {
+						"type": "string",
+						"description": "The date of birth of the user (optional).\nIt can be a string representing the date."
+					},
+					"gender": {
+						"$ref": "#/components/schemas/Gender",
+						"description": "The gender of the user (optional).\nIt should be one of the values from the Gender enum."
+					},
+					"citizenship": {
+						"type": "string",
+						"description": "The citizenship of the user (optional).\nIt should be a valid ISO 3166-1 alpha-3 country code."
+					},
+					"countryCode": {
+						"type": "string",
+						"description": "The ISO 3166-1 alpha-3 country code of the user.\nIt must not be empty and should be a valid ISO 3166-1 alpha-3 country code."
+					},
+					"stateId": {
+						"type": "number",
+						"format": "double",
+						"description": "The ID of the state the user resides in (optional).\nIt should be a valid integer."
+					},
+					"cityId": {
+						"type": "number",
+						"format": "double",
+						"description": "The ID of the city the user resides in (optional).\nIt should be a valid integer."
+					},
+					"addressLine": {
+						"type": "string",
+						"description": "The address line of the user (optional)."
+					},
+					"postalCode": {
+						"type": "string",
+						"description": "The postal code of the user (optional)."
+					}
+				},
+				"required": [
+					"roleId",
+					"firstName",
+					"lastName",
+					"emailAddress",
+					"phoneNumber",
+					"countryCode"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"roleId": "5f4a7b61e55b8439b5bea1b2",
+					"firstName": "John",
+					"middleName": "Doe",
+					"lastName": "Smith",
+					"avatar": {
+						"url": "https://example.com/avatar.jpg"
+					},
+					"cover": {
+						"url": "https://example.com/cover.jpg"
+					},
+					"emailAddress": "john.doe@example.com",
+					"phoneNumber": "1234567890",
+					"dateOfBirth": "1990-01-01",
+					"gender": "Male",
+					"citizenship": "USA",
+					"countryCode": "USA",
+					"stateId": 1,
+					"cityId": 123,
+					"addressLine": "123 Main Street",
+					"postalCode": "12345"
+				}
+			},
+			"LanguageInfo": {
+				"description": "Represents information about a language.",
+				"properties": {
+					"code": {
+						"type": "string",
+						"description": "The code associated with the language."
+					},
+					"name": {
+						"type": "string",
+						"description": "The name of the language."
+					}
+				},
+				"required": [
+					"code",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"code": "en",
+					"name": "English"
+				}
+			},
+			"LanguagesData": {
+				"description": "Represents the data structure for languages.\nExtends List with a generic parameter of LanguageInfo type.",
+				"properties": {
+					"items": {
+						"items": {
+							"$ref": "#/components/schemas/LanguageInfo"
+						},
+						"type": "array",
+						"description": "An array of items."
+					}
+				},
+				"required": [
+					"items"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetLanguagesRes": {
+				"description": "Represents the response payload for retrieving a list of languages.\nExtends the base ApiResponse class with a generic parameter of LanguagesData type.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/LanguagesData"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CountriesData": {
+				"description": "Represents the data structure for countries.\nExtends List with a generic parameter of CountryInfo type.",
+				"properties": {
+					"items": {
+						"items": {
+							"$ref": "#/components/schemas/CountryInfo"
+						},
+						"type": "array",
+						"description": "An array of items."
+					}
+				},
+				"required": [
+					"items"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetCountriesRes": {
+				"description": "Represents the response payload for retrieving a list of countries.\nExtends the base ApiResponse class with a generic parameter of CountriesData type.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/CountriesData"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"StateData": {
+				"description": "Represents information about a state.",
+				"properties": {
+					"state": {
+						"$ref": "#/components/schemas/StateInfo",
+						"description": "Information about the state."
+					},
+					"cities": {
+						"items": {
+							"$ref": "#/components/schemas/CityInfo"
+						},
+						"type": "array",
+						"description": "List of cities within the state."
+					}
+				},
+				"required": [
+					"state",
+					"cities"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CountryData": {
+				"description": "Represents detailed information about a country.",
+				"properties": {
+					"country": {
+						"$ref": "#/components/schemas/CountryInfo",
+						"description": "Information about the country."
+					},
+					"states": {
+						"items": {
+							"$ref": "#/components/schemas/StateData"
+						},
+						"type": "array",
+						"description": "List of states within the country."
+					}
+				},
+				"required": [
+					"country",
+					"states"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"country": {
+						"iso2": "US",
+						"iso3": "USA",
+						"name": "United States"
+					},
+					"states": [
+						{
+							"state": {
+								"id": 1,
+								"name": "California"
+							},
+							"cities": [
+								{
+									"id": 123,
+									"name": "Los Angeles"
+								}
+							]
+						}
+					]
+				}
+			},
+			"GetCountryRes": {
+				"description": "Represents the response payload for retrieving information about a country.\nExtends the base ApiResponse class with a generic parameter of CountryData type.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/CountryData"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UploadFilesData": {
+				"description": "Represents data structure for uploaded files.",
+				"properties": {
+					"uploadedFiles": {
+						"items": {
+							"$ref": "#/components/schemas/Resource"
+						},
+						"type": "array",
+						"description": "An array containing information about the uploaded files.\nEach element is an instance of the Resource class."
+					}
+				},
+				"required": [
+					"uploadedFiles"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"uploadedFiles": [
+						{
+							"url": "https://example.com/file1.jpg"
+						},
+						{
+							"url": "https://example.com/file2.pdf"
+						}
+					]
+				}
+			},
+			"UploadFilesRes": {
+				"description": "Represents the response payload for uploading files.\nExtends the base ApiResponse class with a generic parameter of UploadFilesData type.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/UploadFilesData"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Permission": {
+				"description": "Enum representing various permissions in the system.",
+				"enum": [
+					"ManagePermissions",
+					"ManageRoles",
+					"ManageUsers"
+				],
+				"type": "string"
+			},
+			"PermissionData": {
+				"description": "Represents detailed information about a permission.",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "The MongoDB ObjectId of the permission."
+					},
+					"code": {
+						"$ref": "#/components/schemas/Permission",
+						"description": "The code associated with the permission."
+					},
+					"name": {
+						"type": "string",
+						"description": "The name of the permission."
+					},
+					"description": {
+						"type": "string",
+						"description": "The description of the permission (optional)."
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time",
+						"description": "The date and time when the permission was created."
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time",
+						"description": "The date and time when the permission was last updated."
+					}
+				},
+				"required": [
+					"id",
+					"code",
+					"name",
+					"createdAt",
+					"updatedAt"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"id": "5f4a7b61e55b8439b5bea1b2",
+					"code": "ManageUsers",
+					"name": "Manage Users",
+					"description": "Permission to manage user accounts",
+					"createdAt": "2022-01-20T12:30:00Z",
+					"updatedAt": "2022-01-21T09:45:00Z"
+				}
+			},
+			"Pagination": {
+				"description": "Represents pagination details.",
+				"properties": {
+					"page": {
+						"type": "number",
+						"format": "double",
+						"description": "The current page number."
+					},
+					"pageSize": {
+						"type": "number",
+						"format": "double",
+						"description": "The number of items per page."
+					},
+					"pageCount": {
+						"type": "number",
+						"format": "double",
+						"description": "The total number of pages."
+					},
+					"totalCount": {
+						"type": "number",
+						"format": "double",
+						"description": "The total number of items across all pages."
+					}
+				},
+				"required": [
+					"page",
+					"pageSize",
+					"pageCount",
+					"totalCount"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PermissionsData": {
+				"description": "Represents the data structure for permissions.\nExtends PaginatedList with a generic parameter of PermissionData type.",
+				"properties": {
+					"items": {
+						"items": {
+							"$ref": "#/components/schemas/PermissionData"
+						},
+						"type": "array",
+						"description": "An array of items."
+					},
+					"pagination": {
+						"$ref": "#/components/schemas/Pagination",
+						"description": "The pagination information."
+					}
+				},
+				"required": [
+					"items",
+					"pagination"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetPermissionsRes": {
+				"description": "Represents the response payload for retrieving a list of permissions.\nExtends the base ApiResponse class with a generic parameter of PermissionsData type.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/PermissionsData"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetPermissionsReq": {
+				"description": "Represents the request payload for retrieving a list of permissions.\nThis class is used when querying permissions based on various criteria such as pagination and search query.",
+				"properties": {
+					"page": {
+						"type": "number",
+						"format": "double",
+						"description": "The page number for paginated results.\nIt must not be empty, should be an integer, and must be greater than or equal to 1."
+					},
+					"pageSize": {
+						"type": "number",
+						"format": "double",
+						"description": "The number of permissions to be displayed per page.\nIt must not be empty, should be an integer, and must be greater than or equal to 5."
+					},
+					"q": {
+						"type": "string",
+						"description": "The search query for filtering permissions based on name or other criteria (optional)."
+					}
+				},
+				"required": [
+					"page",
+					"pageSize"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"page": 1,
+					"pageSize": 10,
+					"q": "Manage"
+				}
+			},
+			"GetPermissionRes": {
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/PermissionData"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AddRoleData": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"roleId": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"roleId"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"success": true,
+					"roleId": "61e7eb4be4a1e5b7c8db7fd0"
+				}
+			},
+			"AddRoleRes": {
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/AddRoleData"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RolePermissionReq": {
+				"properties": {
+					"permissionId": {
+						"type": "string",
+						"description": "The MongoDB ObjectId of the permission.\nIt must not be empty and should be a valid MongoDB ObjectId."
+					},
+					"accessType": {
+						"$ref": "#/components/schemas/AccessType",
+						"description": "The access type for the permission (e.g., 'FullControl', 'ReadOnly').\nIt must not be empty."
+					}
+				},
+				"required": [
+					"permissionId",
+					"accessType"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AccessControlReq": {
+				"description": "Represents the request payload for managing access control permissions.\nThis class is used when updating or assigning permissions to a user role.",
+				"properties": {
+					"permissions": {
+						"items": {
+							"$ref": "#/components/schemas/RolePermissionReq"
+						},
+						"type": "array",
+						"description": "An array of role permissions.\nEach element is an instance of the RolePermissionReq class."
+					},
+					"hasAllPermissions": {
+						"type": "boolean",
+						"description": "Indicates whether the user has all the specified permissions.\nThis property is optional."
+					}
+				},
+				"required": [
+					"permissions"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RoleReq": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"accessControl": {
+						"$ref": "#/components/schemas/AccessControlReq"
+					}
+				},
+				"required": [
+					"name",
+					"accessControl"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"name": "Admin",
+					"description": "Adminstrator Role",
+					"accessControl": {
+						"permissions": [
+							{
+								"permissionId": "61e7eb4be4a1e5b7c8db7fd1",
+								"accessType": "FullControl"
+							},
+							{
+								"permissionId": "61e7eb4be4a1e5b7c8db7fd2",
+								"accessType": "ReadOnly"
+							}
+						],
+						"hasAllPermissions": true
+					}
+				}
+			},
+			"RoleData": {
+				"description": "Represents detailed information about a role.",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "The MongoDB ObjectId of the role."
+					},
+					"name": {
+						"type": "string",
+						"description": "The name of the role."
+					},
+					"description": {
+						"type": "string",
+						"description": "The description of the role (optional)."
+					},
+					"accessControl": {
+						"$ref": "#/components/schemas/AccessControlData",
+						"description": "Access control data for the role."
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time",
+						"description": "The date and time when the role was created."
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time",
+						"description": "The date and time when the role was last updated."
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"accessControl",
+					"createdAt",
+					"updatedAt"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"id": "5f4a7b61e55b8439b5bea1b2",
+					"name": "AdminRole",
+					"description": "Administrator Role",
+					"accessControl": {
+						"permissions": [
+							{
+								"permission": {
+									"id": "5f4a7b61e55b8439b5bea1b3",
+									"name": "ManageUsers"
+								},
+								"accessType": "FullControl"
+							},
+							{
+								"permission": {
+									"id": "5f4a7b61e55b8439b5bea1b4",
+									"name": "ViewReports"
+								},
+								"accessType": "ReadOnly"
+							}
+						],
+						"hasAllPermissions": true
+					},
+					"createdAt": "2022-01-20T12:30:00Z",
+					"updatedAt": "2022-01-21T09:45:00Z"
+				}
+			},
+			"RolesData": {
+				"description": "Represents the data structure for roles.\nExtends PaginatedList with a generic parameter of RoleData type.",
+				"properties": {
+					"items": {
+						"items": {
+							"$ref": "#/components/schemas/RoleData"
+						},
+						"type": "array",
+						"description": "An array of items."
+					},
+					"pagination": {
+						"$ref": "#/components/schemas/Pagination",
+						"description": "The pagination information."
+					}
+				},
+				"required": [
+					"items",
+					"pagination"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetRolesRes": {
+				"description": "Represents the response payload for retrieving a list of roles.\nExtends the base ApiResponse class with a generic parameter of RolesData type.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/RolesData"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetRolesReq": {
+				"description": "Represents the request payload for retrieving a list of roles.\nThis class is used when querying roles based on various criteria such as pagination and search query.",
+				"properties": {
+					"page": {
+						"type": "number",
+						"format": "double",
+						"description": "The page number for paginated results.\nIt must not be empty, should be an integer, and must be greater than or equal to 1."
+					},
+					"pageSize": {
+						"type": "number",
+						"format": "double",
+						"description": "The number of roles to be displayed per page.\nIt must not be empty, should be an integer, and must be greater than or equal to 5."
+					},
+					"q": {
+						"type": "string",
+						"description": "The search query for filtering roles based on name or other criteria (optional)."
+					}
+				},
+				"required": [
+					"page",
+					"pageSize"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"page": 1,
+					"pageSize": 10,
+					"q": "AdminRole"
+				}
+			},
+			"GetRoleRes": {
+				"description": "Represents detailed information about a role.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/RoleData"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateRoleRes": {
+				"description": "Represents the response payload for updating a role.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/Success"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeleteRoleRes": {
+				"description": "Represents the response payload for deleting a rol.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/Success"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AddUserData": {
+				"description": "Represents the data structure for the response after adding a new user.\nThis class is used to parse and store information about the success of the operation and the user's ID.",
+				"properties": {
+					"success": {
+						"type": "boolean",
+						"description": "Indicates whether the operation to add a new user was successful or not."
+					},
+					"userId": {
+						"type": "string",
+						"description": "The unique identifier (ID) of the newly added user."
+					}
+				},
+				"required": [
+					"success",
+					"userId"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"success": true,
+					"userId": "5f4a7b61e55b8439b5bea1b1"
+				}
+			},
+			"AddUserRes": {
+				"description": "Represents the response payload for adding a new user.\nExtends the base ApiResponse class with a generic parameter of AddUserData type.\nThis class is used to handle the response after successfully adding a new user.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/AddUserData"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ShortUserData": {
+				"description": "Represents a concise version of user data.",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "The MongoDB ObjectId of the user."
+					},
+					"accountType": {
+						"$ref": "#/components/schemas/AccountType",
+						"description": "The type of user account."
+					},
+					"role": {
+						"$ref": "#/components/schemas/ShortRoleData",
+						"description": "The role information of the user."
+					},
+					"fullName": {
+						"type": "string",
+						"description": "The full name of the user."
+					},
+					"avatar": {
+						"$ref": "#/components/schemas/Resource",
+						"description": "The avatar resource for the user (optional).\nIt can be an instance of the Resource class."
+					},
+					"emailAddress": {
+						"type": "string",
+						"description": "The email address of the user."
+					},
+					"phoneNumber": {
+						"type": "string",
+						"description": "The phone number of the user."
+					},
+					"country": {
+						"$ref": "#/components/schemas/CountryInfo",
+						"description": "The country information of the user."
+					},
+					"state": {
+						"$ref": "#/components/schemas/StateInfo",
+						"description": "The state information of the user (optional)."
+					},
+					"city": {
+						"$ref": "#/components/schemas/CityInfo",
+						"description": "The city information of the user (optional)."
+					},
+					"activationStatus": {
+						"$ref": "#/components/schemas/UserActivationStatus",
+						"description": "The activation status of the user account."
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time",
+						"description": "The date and time when the user was created."
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time",
+						"description": "The date and time when the user was last updated."
+					}
+				},
+				"required": [
+					"id",
+					"accountType",
+					"role",
+					"fullName",
+					"emailAddress",
+					"phoneNumber",
+					"country",
+					"activationStatus",
+					"createdAt",
+					"updatedAt"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"id": "5f4a7b61e55b8439b5bea1b1",
+					"accountType": "Admin",
+					"role": {
+						"id": "5f4a7b61e55b8439b5bea1b2",
+						"name": "AdminRole"
+					},
+					"fullName": "John Doe",
+					"avatar": {
+						"url": "https://example.com/avatar.jpg"
+					},
+					"emailAddress": "john.doe@example.com",
+					"phoneNumber": "1234567890",
+					"country": {
+						"iso2": "US",
+						"iso3": "USA",
+						"name": "United States"
+					},
+					"state": {
+						"id": 1,
+						"name": "California"
+					},
+					"city": {
+						"id": 123,
+						"name": "Los Angeles"
+					},
+					"activationStatus": "Active",
+					"createdAt": "2022-01-20T12:30:00Z",
+					"updatedAt": "2022-01-21T09:45:00Z"
+				}
+			},
+			"UsersData": {
+				"description": "Represents the data structure for users.\nExtends PaginatedList with a generic parameter of ShortUserData type.",
+				"properties": {
+					"items": {
+						"items": {
+							"$ref": "#/components/schemas/ShortUserData"
+						},
+						"type": "array",
+						"description": "An array of items."
+					},
+					"pagination": {
+						"$ref": "#/components/schemas/Pagination",
+						"description": "The pagination information."
+					}
+				},
+				"required": [
+					"items",
+					"pagination"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetUsersRes": {
+				"description": "Represents the response payload for retrieving a list of users.\nExtends the base ApiResponse class with a generic parameter of UsersData type.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/UsersData"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GetUsersReq": {
+				"description": "Represents the request payload for retrieving a list of users.\nThis class is used when querying users based on various criteria such as pagination, account type, role, activation status, and search query.",
+				"properties": {
+					"page": {
+						"type": "number",
+						"format": "double",
+						"description": "The page number for paginated results.\nIt must not be empty, should be an integer, and must be greater than or equal to 1."
+					},
+					"pageSize": {
+						"type": "number",
+						"format": "double",
+						"description": "The number of users to be displayed per page.\nIt must not be empty, should be an integer, and must be greater than or equal to 5."
+					},
+					"accountType": {
+						"$ref": "#/components/schemas/AccountType",
+						"description": "The type of user account (optional).\nIt should be one of the values from the AccountType enum."
+					},
+					"roleId": {
+						"type": "string",
+						"description": "The MongoDB ObjectId of the user's role (optional).\nIt should be a valid MongoDB ObjectId."
+					},
+					"activationStatus": {
+						"$ref": "#/components/schemas/UserActivationStatus",
+						"description": "The activation status of the user account (optional).\nIt should be one of the values from the UserActivationStatus enum."
+					},
+					"q": {
+						"type": "string",
+						"description": "The search query for filtering users based on name or other criteria (optional)."
+					}
+				},
+				"required": [
+					"page",
+					"pageSize"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"page": 1,
+					"pageSize": 10,
+					"accountType": "Admin",
+					"roleId": "5f4a7b61e55b8439b5bea1b2",
+					"activationStatus": "Active",
+					"q": "John Doe"
+				}
+			},
+			"DeleteUserRes": {
+				"description": "Represents the response payload for deleting a user.",
+				"properties": {
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/Success"
+							}
+						],
+						"nullable": true,
+						"description": "The data in the response, if any."
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/Error"
+						},
+						"type": "array",
+						"description": "An array of errors in the response."
+					},
+					"warnings": {
+						"items": {
+							"$ref": "#/components/schemas/Warning"
+						},
+						"type": "array",
+						"description": "An array of warnings in the response."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"AccessToken": {
+				"type": "apiKey",
+				"name": "x-access-token",
+				"in": "header",
+				"scopes": {
+					"admin": "Admin"
+				}
+			},
+			"RefreshToken": {
+				"type": "apiKey",
+				"name": "x-refresh-token",
+				"in": "header",
+				"scopes": {
+					"admin": "Admin"
+				}
+			}
+		}
+	},
+	"info": {
+		"title": "Node.js tsoa MongoDB Boilerplate Admin API",
+		"version": "v1",
+		"description": "This is a Node.js tsoa MongoDB Boilerplate Admin API version v1. It provides comprehensive documentation and administrative functionalities for managing MongoDB databases. The API is designed to streamline administrative tasks and enhance the overall efficiency of MongoDB operations. The 'public/docs/admin' directory serves as the output location for the API documentation, ensuring easy access for developers and administrators. With specVersion 3, this API adheres to the latest specifications, offering robust performance and compatibility. Whether it's managing user permissions, data schemas, or database configurations, this API simplifies administrative workflows and empowers developers to build scalable MongoDB applications with ease.",
+		"license": {
+			"name": "Apache 2.0"
+		},
+		"contact": {
+			"name": "Akram B.",
+			"email": "belhajsalem.akram@gmail.com"
+		}
+	},
+	"paths": {
+		"/auth/password/{token}": {
+			"post": {
+				"operationId": "setPassword",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SignInUserRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Set password for an admin.",
+				"summary": "Set password for an admin using the provided token.",
+				"tags": [
+					"User Authentication"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					},
+					{
+						"description": "- The token associated with the admin for password reset.",
+						"in": "path",
+						"name": "token",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "- The request body containing the new password.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ResetPasswordReq",
+								"description": "- The request body containing the new password."
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/password-reset": {
+			"post": {
+				"operationId": "sendPasswordResetToken",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SendPasswordResetTokenRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Send password reset token.",
+				"summary": "Send a password reset token to the specified admin.",
+				"tags": [
+					"User Authentication"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "- The request body containing admin information for sending the reset token.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SendPasswordResetTokenReq",
+								"description": "- The request body containing admin information for sending the reset token."
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/password-reset/{token}": {
+			"get": {
+				"operationId": "checkPasswordResetToken",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CheckPasswordResetTokenRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Check password reset token validity.",
+				"summary": "Check the validity of a password reset token.",
+				"tags": [
+					"User Authentication"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					},
+					{
+						"description": "- The password reset token to be checked.",
+						"in": "path",
+						"name": "token",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "resetPassword",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResetPasswordRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Reset admin password.",
+				"summary": "Reset admin password using the provided token.",
+				"tags": [
+					"User Authentication"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					},
+					{
+						"description": "- The token associated with the admin for password reset.",
+						"in": "path",
+						"name": "token",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "- The request body containing the new password.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ResetPasswordReq",
+								"description": "- The request body containing the new password."
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/sign-in": {
+			"post": {
+				"operationId": "signInUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SignInUserRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Sign in an admin.",
+				"summary": "Sign in an admin.",
+				"tags": [
+					"User Authentication"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "- The request body containing admin credentials for sign-in.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SignInUserReq",
+								"description": "- The request body containing admin credentials for sign-in."
+							}
+						}
+					}
+				}
+			}
+		},
+		"/me": {
+			"get": {
+				"operationId": "getCurrentAdmin",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetUserRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get current admin.",
+				"summary": "Get information about the currently authenticated admin.",
+				"tags": [
+					"Current User"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "updateCurrentAdmin",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UpdateUserRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update current admin.",
+				"summary": "Update information for the currently authenticated admin.",
+				"tags": [
+					"Current User"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "- The request body containing updated admin information.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserReq",
+								"description": "- The request body containing updated admin information."
+							}
+						}
+					}
+				}
+			}
+		},
+		"/directories/languages": {
+			"get": {
+				"operationId": "getLanguages",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetLanguagesRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get supported languages.",
+				"summary": "Get a list of supported languages.",
+				"tags": [
+					"Multilingual Directories"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/directories/countries": {
+			"get": {
+				"operationId": "getCountries",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetCountriesRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get supported countries.",
+				"summary": "Get a list of supported countries.",
+				"tags": [
+					"Multilingual Directories"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/directories/countries/{iso3}": {
+			"get": {
+				"operationId": "getCountry",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetCountryRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get information about a specific country.",
+				"summary": "Get information about a specific country by ISO3 code.",
+				"tags": [
+					"Multilingual Directories"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					},
+					{
+						"description": "- The ISO3 code of the country to retrieve information about.",
+						"in": "path",
+						"name": "iso3",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/files/upload": {
+			"post": {
+				"operationId": "uploadFiles",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UploadFilesRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Upload files.",
+				"summary": "Upload files to the server.",
+				"tags": [
+					"Files Upload"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"files": {
+										"items": {
+											"type": "string",
+											"format": "binary"
+										},
+										"type": "array",
+										"description": "- The array of files to be uploaded."
+									}
+								},
+								"required": [
+									"files"
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/permissions": {
+			"get": {
+				"operationId": "getPermissions",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetPermissionsRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get a list of permissions.",
+				"summary": "Get a list of permissions based on query parameters.",
+				"tags": [
+					"Permission Management"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					},
+					{
+						"description": "The page number for paginated results.\nIt must not be empty, should be an integer, and must be greater than or equal to 1.",
+						"in": "query",
+						"name": "page",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "The number of permissions to be displayed per page.\nIt must not be empty, should be an integer, and must be greater than or equal to 5.",
+						"in": "query",
+						"name": "pageSize",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "The search query for filtering permissions based on name or other criteria (optional).",
+						"in": "query",
+						"name": "q",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/permissions/{permissionId}": {
+			"get": {
+				"operationId": "getPermission",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetPermissionRes"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Permission Management"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					},
+					{
+						"in": "path",
+						"name": "permissionId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/roles": {
+			"post": {
+				"operationId": "addRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AddRoleRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Adds a new role based on the provided request body.",
+				"summary": "Add a new role.",
+				"tags": [
+					"Role Management"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "- The request body containing information about the role.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RoleReq",
+								"description": "- The request body containing information about the role."
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "getRoles",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetRolesRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves a list of roles.",
+				"summary": "Get a list of roles.",
+				"tags": [
+					"Role Management"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					},
+					{
+						"description": "The page number for paginated results.\nIt must not be empty, should be an integer, and must be greater than or equal to 1.",
+						"in": "query",
+						"name": "page",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "The number of roles to be displayed per page.\nIt must not be empty, should be an integer, and must be greater than or equal to 5.",
+						"in": "query",
+						"name": "pageSize",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "The search query for filtering roles based on name or other criteria (optional).",
+						"in": "query",
+						"name": "q",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/roles/{roleId}": {
+			"get": {
+				"operationId": "getRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetRoleRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves information about a specific role based on the provided role ID.",
+				"summary": "Get role details.",
+				"tags": [
+					"Role Management"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					},
+					{
+						"description": "- The unique identifier of the role.",
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "updateRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UpdateRoleRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Updates information about a specific role based on the provided role ID and request body.",
+				"summary": "Update role details.",
+				"tags": [
+					"Role Management"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					},
+					{
+						"description": "- The unique identifier of the role.",
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "- The request body containing updated information about the role.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RoleReq",
+								"description": "- The request body containing updated information about the role."
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "deleteRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DeleteRoleRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Deletes a specific role based on the provided role ID.",
+				"summary": "Delete a role.",
+				"tags": [
+					"Role Management"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					},
+					{
+						"description": "- The unique identifier of the role to be deleted.",
+						"in": "path",
+						"name": "roleId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/users": {
+			"post": {
+				"operationId": "addUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AddUserRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Add a new user.",
+				"summary": "Add a new user with the provided user details.",
+				"tags": [
+					"User Management"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "- The request body containing information for the new user.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserReq",
+								"description": "- The request body containing information for the new user."
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "getUsers",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetUsersRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get a list of users.",
+				"summary": "Get a list of users based on query parameters.",
+				"tags": [
+					"User Management"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					},
+					{
+						"description": "The page number for paginated results.\nIt must not be empty, should be an integer, and must be greater than or equal to 1.",
+						"in": "query",
+						"name": "page",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "The number of users to be displayed per page.\nIt must not be empty, should be an integer, and must be greater than or equal to 5.",
+						"in": "query",
+						"name": "pageSize",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "The type of user account (optional).\nIt should be one of the values from the AccountType enum.",
+						"in": "query",
+						"name": "accountType",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/AccountType"
+						}
+					},
+					{
+						"description": "The MongoDB ObjectId of the user's role (optional).\nIt should be a valid MongoDB ObjectId.",
+						"in": "query",
+						"name": "roleId",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"description": "The activation status of the user account (optional).\nIt should be one of the values from the UserActivationStatus enum.",
+						"in": "query",
+						"name": "activationStatus",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/UserActivationStatus"
+						}
+					},
+					{
+						"description": "The search query for filtering users based on name or other criteria (optional).",
+						"in": "query",
+						"name": "q",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/users/{userId}": {
+			"get": {
+				"operationId": "getUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GetUserRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get user by ID.",
+				"summary": "Get information about a specific user by ID.",
+				"tags": [
+					"User Management"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					},
+					{
+						"description": "- The ID of the user to retrieve.",
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "updateUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UpdateUserRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Updates information about a specific user.",
+				"summary": "Update user details.",
+				"tags": [
+					"User Management"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					},
+					{
+						"description": "- The unique identifier of the user.",
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "- The updated information for the user.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserReq",
+								"description": "- The updated information for the user."
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "deleteUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DeleteUserRes"
+								}
+							}
+						}
+					}
+				},
+				"description": "Deletes a specific user.",
+				"summary": "Delete a user.",
+				"tags": [
+					"User Management"
+				],
+				"security": [
+					{
+						"AccessToken": [
+							"admin"
+						]
+					},
+					{
+						"RefreshToken": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The language code.",
+						"in": "header",
+						"name": "x-lang-code",
+						"required": false,
+						"schema": {
+							"default": "en",
+							"type": "string"
+						}
+					},
+					{
+						"description": "- The unique identifier of the user to be deleted.",
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/api/admin/v1"
+		}
+	],
+	"tags": [
+		{
+			"name": "Multilingual Directories",
+			"description": "A robust set of endpoints and functionalities designed to handle directories in a multilingual context. This feature ensures seamless organization and retrieval of data across different languages, enhancing accessibility and user experience within the system."
+		},
+		{
+			"name": "User Authentication",
+			"description": "Comprehensive endpoints and functionalities dedicated to secure user authentication processes, ensuring a reliable and protected mechanism for user access to the system."
+		},
+		{
+			"name": "Current User",
+			"description": "Specialized endpoints and functionalities tailored for seamless interaction with the authenticated user's account, providing personalized access to information and settings."
+		},
+		{
+			"name": "Files Upload",
+			"description": "Versatile set of endpoints and functionalities designed for effortless uploading, retrieval, and management of files within the system, delivering a user-friendly and efficient file-handling experience."
+		},
+		{
+			"name": "Permission Management",
+			"description": "Purpose-built endpoints and functionalities for precise control and oversight of user permissions, allowing administrators to manage access rights with granularity."
+		},
+		{
+			"name": "Role Management",
+			"description": "Comprehensive set of endpoints and functionalities dedicated to the meticulous administration and customization of user roles within the system, empowering administrators to define and assign roles strategically."
+		},
+		{
+			"name": "User Management",
+			"description": "An extensive suite of endpoints and functionalities focused on efficient and user-friendly administration of user-related tasks, enabling administrators to govern user accounts, roles, and permissions seamlessly."
+		}
+	]
+}

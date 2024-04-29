@@ -1,0 +1,80 @@
+{
+    "entryFile": "src/app.ts",
+    "noImplicitAdditionalProperties": "throw-on-extras",
+    "controllerPathGlobs": [
+        "src/controllers/admin/auth.controller.ts",
+        "src/controllers/admin/current-user.controller.ts",
+        "src/controllers/admin/directory.controller.ts",
+        "src/controllers/admin/file.controller.ts",
+        "src/controllers/admin/permission.controller.ts",
+        "src/controllers/admin/role.controller.ts",
+        "src/controllers/admin/user.controller.ts"
+    ],
+    "spec": {
+        "outputDirectory": "public/docs/admin",
+        "version": "v1",
+        "specVersion": 3,
+        "name": "Node.js tsoa MongoDB Boilerplate Admin API",
+        "description": "This is a Node.js tsoa MongoDB Boilerplate Admin API version v1. It provides comprehensive documentation and administrative functionalities for managing MongoDB databases. The API is designed to streamline administrative tasks and enhance the overall efficiency of MongoDB operations. The 'public/docs/admin' directory serves as the output location for the API documentation, ensuring easy access for developers and administrators. With specVersion 3, this API adheres to the latest specifications, offering robust performance and compatibility. Whether it's managing user permissions, data schemas, or database configurations, this API simplifies administrative workflows and empowers developers to build scalable MongoDB applications with ease.",
+        "contact": {
+            "name": "Akram B.",
+            "email": "belhajsalem.akram@gmail.com"
+        },
+        "license": "Apache 2.0",
+        "basePath": "/api/admin/v1",
+        "securityDefinitions": {
+            "AccessToken": {
+                "type": "apiKey",
+                "name": "x-access-token",
+                "in": "header",
+                "scopes": {
+                    "admin": "Admin"
+                }
+            },
+            "RefreshToken": {
+                "type": "apiKey",
+                "name": "x-refresh-token",
+                "in": "header",
+                "scopes": {
+                    "admin": "Admin"
+                }
+            }
+        },
+        "tags": [
+            {
+                "name": "Multilingual Directories",
+                "description": "A robust set of endpoints and functionalities designed to handle directories in a multilingual context. This feature ensures seamless organization and retrieval of data across different languages, enhancing accessibility and user experience within the system."
+            },
+            {
+                "name": "User Authentication",
+                "description": "Comprehensive endpoints and functionalities dedicated to secure user authentication processes, ensuring a reliable and protected mechanism for user access to the system."
+            },
+            {
+                "name": "Current User",
+                "description": "Specialized endpoints and functionalities tailored for seamless interaction with the authenticated user's account, providing personalized access to information and settings."
+            },
+            {
+                "name": "Files Upload",
+                "description": "Versatile set of endpoints and functionalities designed for effortless uploading, retrieval, and management of files within the system, delivering a user-friendly and efficient file-handling experience."
+            },
+            {
+                "name": "Permission Management",
+                "description": "Purpose-built endpoints and functionalities for precise control and oversight of user permissions, allowing administrators to manage access rights with granularity."
+            },
+            {
+                "name": "Role Management",
+                "description": "Comprehensive set of endpoints and functionalities dedicated to the meticulous administration and customization of user roles within the system, empowering administrators to define and assign roles strategically."
+            },
+            {
+                "name": "User Management",
+                "description": "An extensive suite of endpoints and functionalities focused on efficient and user-friendly administration of user-related tasks, enabling administrators to govern user accounts, roles, and permissions seamlessly."
+            }
+        ]
+    },
+    "routes": {
+        "routesDir": "src/routes/admin",
+        "basePath": "/api/admin/v1",
+        "iocModule": "src/utils/injector",
+        "authenticationModule": "src/middleware/auth.middleware"
+    }
+}
